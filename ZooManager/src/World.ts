@@ -1,4 +1,5 @@
-import { Container, Sprite, Graphics } from 'pixi.js';
+import { Container, Graphics } from 'pixi.js';
+import { Animal } from './Animal';
 
 export class World extends Container {
     public readonly worldWidth: number;
@@ -23,12 +24,12 @@ export class World extends Container {
     {
         for (let i = 0; i < 4; i++) 
         {
-            const animalSprite = Sprite.from(animalAlias);
-            animalSprite.anchor.set(0.5);
+            const animal = new Animal(animalAlias);
+            animal.sprite.anchor.set(0.5);
             // Posiciona cada coelho no centro de sua respectiva seção de tela
-            animalSprite.x = (screenWidth * i) + (screenWidth / 2);
-            animalSprite.y = this.worldHeight / 2;
-            this.addChild(animalSprite);
+            animal.x = (screenWidth * i) + (screenWidth / 2);
+            animal.y = this.worldHeight / 2;
+            this.addChild(animal);
         }
     }
 }

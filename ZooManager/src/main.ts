@@ -1,6 +1,7 @@
 import { Application, Assets } from "pixi.js";
 import { World } from "./World";
 import { Camera } from "./Camera";
+import { HUD } from "./HUD";
 
 async function bootstrap() {
     const app = new Application();
@@ -19,6 +20,9 @@ async function bootstrap() {
         const container = document.getElementById("pixi-container");
         if(container)
             container.appendChild(app.canvas);
+
+        app.stage.eventMode = 'static';
+        app.stage.hitArea = app.screen;
     }
 
     async function preload() 
@@ -38,12 +42,17 @@ async function bootstrap() {
         await setup();
         await preload();
 
+        // World
         const world = new World(app.screen.width, app.screen.height);
         app.stage.addChild(world);
         
+        //Camera
         new Camera(world, app.screen.width, world.worldWidth);
 
-        console.log("Jogo inicializado com sistema de câmera horizontal.");
+        // HUD
+        const hud = new HUD(app, world);
+        app.stage.addChild(hud);
+        hud.Init();
     })();
 }
 
