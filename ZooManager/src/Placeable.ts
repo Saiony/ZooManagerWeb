@@ -1,13 +1,14 @@
 import {Container, Sprite} from 'pixi.js';
+import { PlaceablesType } from './PlaceablesType';
 
 export class Placeable extends Container {
     sprite: Sprite;
-    animalType: string = '';
+    readonly placeableType: PlaceablesType;
     
-
-    constructor(textureAlias: string) {
+    constructor(opts: { textureAlias: string; placeableType: PlaceablesType }) {
         super();
-        this.sprite = Sprite.from(textureAlias);
-        this.addChild(this.sprite); // se Animal for um Container
+        this.placeableType = opts.placeableType;
+        this.sprite = Sprite.from(opts.textureAlias);
+        this.addChild(this.sprite);
     }
 }

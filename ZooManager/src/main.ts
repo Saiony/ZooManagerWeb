@@ -31,6 +31,11 @@ async function bootstrap() {
             { alias: 'background', src: 'https://pixijs.com/assets/tutorials/fish-pond/pond_background.jpg' },
             { alias: 'fish1', src: 'https://pixijs.com/assets/tutorials/fish-pond/fish1.png' },
             { alias: 'bunny', src: '/assets/bunny.png'},
+            { alias: 'fox', src: '/assets/Animals/fox.png'},
+            { alias: 'monkey', src: '/assets/Animals/monkey.png'},
+            { alias: 'lion', src: '/assets/Animals/lion.png'},
+            { alias: 'elephant', src: '/assets/Animals/elephant.png'},
+            { alias: 'tree', src: '/assets/Placeables/tree.png'},
         ];
 
         // Load the assets defined above.

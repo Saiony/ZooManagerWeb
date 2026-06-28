@@ -1,11 +1,14 @@
 import { Container, Graphics, Application } from 'pixi.js';
-import { HUDButton } from './HUDButton';
+import { HUDPlaceableButton } from './HUDPlaceableButton';
 import { World } from './World';
+import { PLACEABLES } from './PlaceableData';
 
 export class HUD extends Container {
     private background: Graphics;
     private world: World;
     private app: Application;
+    // List of placeable aliases to spawn buttons for (pre-registered in PLACEABLES)
+    public readonly PlaceablesButtons: string[] = ['tree'];
     
     public static readonly HEIGHT = 100;
 
@@ -23,14 +26,18 @@ export class HUD extends Container {
     }
 
     public Init() {
-        const buttonSpacing = this.app.screen.width / 3;
-        
-        // Spawnar 2 botões iguais para teste (com a imagem do coelho)
-        for (let i = 0; i < 2; i++)
-        {
-            const button = new HUDButton("/assets/bunny.png", this.world, this.app);
-            
-            // evenly distribute it, horizontally
+        const total = this.PlaceablesButtons.length;
+        const buttonSpacing = this.app.screen.width / (total + 1);
+
+        // Create a button for each placeable alias registered in PlaceablesButtons
+        for (let i = 0; i < total; i++) {
+            const alias = this.PlaceablesButtons[i];
+            const cfg = PLACEABLES[alias];
+            if (!cfg) continue;
+
+            const button = new HUDPlaceableButton(cfg, this.world, this.app);
+
+            // evenly distribute horizontally
             button.x = buttonSpacing * (i + 1);
             button.y = HUD.HEIGHT / 2;
             this.addChild(button);
