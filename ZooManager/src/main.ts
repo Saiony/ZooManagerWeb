@@ -9,7 +9,13 @@ import foxImg from "./assets/Animals/fox.png";
 import monkeyImg from "./assets/Animals/monkey.png";
 import lionImg from "./assets/Animals/lion.png";
 import elephantImg from "./assets/Animals/elephant.png";
+
 import treeImg from "./assets/Placeables/tree.png";
+import tree2Img from "./assets/Placeables/tree2.png";
+import bananaImg from "./assets/Placeables/banana.png";
+import meatImg from "./assets/Placeables/meat.png";
+import rockImg from "./assets/Placeables/rock.png";
+import flowerImg from "./assets/Placeables/flower.png";
 
 import bgmMusic from './assets/sfx/bgmlofi.mp3';
 import placeSfx from './assets/sfx/place.mp3';
@@ -41,6 +47,11 @@ async function bootstrap() {
       { alias: "lion", src: lionImg },
       { alias: "elephant", src: elephantImg },
       { alias: "tree", src: treeImg },
+      { alias: "tree2", src: tree2Img },
+      { alias: "banana", src: bananaImg },
+      { alias: "meat", src: meatImg },
+      { alias: "rock", src: rockImg },
+      { alias: "flower", src: flowerImg },
       { alias: "bgm", src: bgmMusic},
       { alias: "placeSfx", src: placeSfx},
     ];

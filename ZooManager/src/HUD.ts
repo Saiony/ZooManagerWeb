@@ -8,7 +8,7 @@ export class HUD extends Container {
   private world: World;
   private app: Application;
   // List of placeable aliases to spawn buttons for (pre-registered in PLACEABLES)
-  public readonly PlaceablesButtons: string[] = ["tree"];
+  public readonly PlaceablesButtons: string[] = ["tree", "tree2", "rock", "flower", "banana", "meat"];
 
   public static readonly HEIGHT = 100;
 
@@ -35,7 +35,9 @@ export class HUD extends Container {
     for (let i = 0; i < total; i++) {
       const alias = this.PlaceablesButtons[i];
       const cfg = PLACEABLES[alias];
-      if (!cfg) continue;
+      
+      if (!cfg)
+        continue;
 
       const button = new HUDPlaceableButton(cfg, this.world, this.app);
 

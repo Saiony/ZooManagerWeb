@@ -82,6 +82,7 @@ export class HUDPlaceableButton extends Container {
       textureAlias: this.placeableConfig.textureAlias,
       placeableType: this.placeableConfig.placeableType,
     });
+    
     placeable.sprite.anchor.set(0.5);
     placeable.position.set(localPos.x, localPos.y);
     cage.addChild(placeable);
@@ -89,7 +90,7 @@ export class HUDPlaceableButton extends Container {
     sound.play("placeSfx");
 
     console.log(
-      `Placeable spawned: ${this.placeableConfig.id} at x=${localPos.x}, y=${localPos.y}`,
+      `Placeable spawned: ${this.placeableConfig.placeableType} at x=${localPos.x}, y=${localPos.y}`,
     );
   }
 }
