@@ -1,4 +1,4 @@
-import { Application, Container, FederatedPointerEvent, Sprite } from "pixi.js";
+import { Application, Container, FederatedPointerEvent, Sprite, Text } from "pixi.js";
 import { World } from "./World";
 import { Placeable } from "./Placeable";
 import type { PlaceableConfig } from "./PlaceableData";
@@ -12,6 +12,8 @@ export class HUDPlaceableButton extends Container {
   private app: Application;
 
   private preview: Sprite | null = null;
+  private locked: boolean = false;
+  private lockOverlay: Sprite | null = null;
 
   constructor(config: PlaceableConfig, world: World, app: Application) {
     super();
@@ -21,17 +23,43 @@ export class HUDPlaceableButton extends Container {
 
     const icon = Sprite.from(config.textureAlias);
     icon.anchor.set(0.5);
-    icon.scale.set(0.8);
+    icon.scale.set(1.5);
     this.addChild(icon);
+
+    // price display (banana icon + number) under the main icon
+    const priceContainer = new Container();
+    priceContainer.y = (icon.height * 0.5); // place a bit under the main icon
+    this.addChild(priceContainer);
+
+    const moneyIcon = Sprite.from("money");
+    moneyIcon.anchor.set(0.5);
+    moneyIcon.scale.set(0.4);
+    moneyIcon.x = -12; // shift left so number fits on right
+    priceContainer.addChild(moneyIcon);
+
+    const priceText = new Text(`${this.placeableConfig.price}`, {
+      fill: 0xffff66 as any,
+      fontSize: 32 as any,
+      fontWeight: "bold" as any,
+    } as any);
+    
+    // align vertically with money icon
+    priceText.x = 0;
+    priceText.y = -priceText.height / 2;
+    priceContainer.addChild(priceText);
 
     // enable interactivity
     this.eventMode = "static";
     this.cursor = "pointer";
 
     this.on("pointerdown", this.onPointerDown, this);
+    this.app.ticker.add(this.sync, this);
   }
 
   private onPointerDown(event: FederatedPointerEvent) {
+    if (this.locked) 
+      return; 
+    
     // create preview that follows the pointer
     this.preview = Sprite.from(this.placeableConfig.textureAlias);
     this.preview.anchor.set(0.5);
@@ -69,7 +97,8 @@ export class HUDPlaceableButton extends Container {
 
     // only allow dropping above the HUD area (assuming HUD height is 100)
     const targetCage = this.world.Cages.find((cage) => cage.isPointerOver);
-    if (targetCage) {
+    if (targetCage && !targetCage.locked) {
+      this.world.removeMoney(this.placeableConfig.price);
       this.spawnPlaceable(globalPos, targetCage);
     }
   }
@@ -81,16 +110,36 @@ export class HUDPlaceableButton extends Container {
     const placeable = new Placeable({
       textureAlias: this.placeableConfig.textureAlias,
       placeableType: this.placeableConfig.placeableType,
+      environmentScore: this.placeableConfig.environmentScore
     });
     
     placeable.sprite.anchor.set(0.5);
     placeable.position.set(localPos.x, localPos.y);
-    cage.addChild(placeable);
+    cage.addPlaceable(placeable);
 
     sound.play("placeSfx");
 
     console.log(
       `Placeable spawned: ${this.placeableConfig.placeableType} at x=${localPos.x}, y=${localPos.y}`,
     );
+  }
+
+  public setLocked(locked: boolean) {
+    this.locked = locked;
+    this.cursor = locked ? "not-allowed" : "pointer";
+    if (!this.lockOverlay) {
+      const overlay = Sprite.from("locked");
+      overlay.anchor.set(0.5);
+      overlay.alpha = 0.9;
+      overlay.scale.set(0.4);
+      this.addChild(overlay);
+      this.lockOverlay = overlay;
+    }
+    this.lockOverlay!.visible = locked;
+  }
+
+  private sync() {
+    const purchasable = this.world.Money >= this.placeableConfig.price;
+    this.setLocked(!purchasable);
   }
 }

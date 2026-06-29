@@ -11,6 +11,10 @@ export class World extends Container {
   public readonly Animals: string[] = ["fox", "monkey", "lion", "elephant"];
   public Cages: Cage[] = [];
 
+  // Economy variables
+  public Money: number = 4;
+  public MoneyPerSecond: number = 0;
+
   constructor(screenWidth: number, screenHeight: number) {
     super();
 
@@ -24,7 +28,6 @@ export class World extends Container {
 
     this.addChild(background);
 
-    // Create one animal per screen segment, spaced horizontally
     for (let i = 0; i < this.Animals.length; i++) {
       const posX = (this.animalScreenWidth/1.5 * i) + this.animalScreenWidth / 2;
       const posY = this.worldHeight / 2;
@@ -34,6 +37,12 @@ export class World extends Container {
       if (animal) {
         const cage = this.createCage({ x: posX, y: posY }, animal);
         this.Cages.push(cage);
+        
+        //first cage starts unlocked
+        if (i === 0) 
+          cage.unlock(); 
+        else 
+          cage.lock();
       }
     }
   }
@@ -57,9 +66,22 @@ export class World extends Container {
     const posX = globalPos.x;
     const posY = globalPos.y;
 
-    const cage = new Cage(posX, posY, animal.id);
+    const cage = new Cage(this, posX, posY, animal.id);
     cage.addChild(animal);
     this.addChild(cage);
     return cage;
+  }
+
+  public addMoney(amount: number) {
+    this.Money += amount;
+  }
+
+  public removeMoney(amount: number) {
+    this.Money -= amount;
+    if (this.Money < 0) this.Money = 0;
+  }
+
+  public addMoneyPerSecond(amount: number) {
+    this.MoneyPerSecond += amount;
   }
 }

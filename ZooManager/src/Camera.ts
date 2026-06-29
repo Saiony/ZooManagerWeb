@@ -27,7 +27,8 @@ export class Camera {
   }
 
   private onPointerMove(event: PointerEvent) {
-    if (!this.isDragging) return;
+    if (!this.isDragging) 
+      return;
 
     const currentX = event.clientX;
     const diffX = currentX - this.startX;
@@ -48,15 +49,5 @@ export class Camera {
 
   private onPointerUp() {
     this.isDragging = false;
-  }
-
-  public updateBounds(screenWidth: number, worldWidth: number) {
-    this.screenWidth = screenWidth;
-    this.worldWidth = worldWidth;
-
-    // adjust position if bounds change
-    const minX = Math.min(0, this.screenWidth - this.worldWidth);
-    if (this.target.x < minX) this.target.x = minX;
-    if (this.target.x > 0) this.target.x = 0;
   }
 }
