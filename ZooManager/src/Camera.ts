@@ -14,9 +14,6 @@ export class Camera {
     this.screenWidth = screenWidth;
     this.worldWidth = worldWidth;
 
-    // Tornar o target interativo para capturar o arraste em qualquer lugar dele
-    // Ou melhor, capturar no palco (stage) via app, mas vamos tentar no target primeiro
-    // se o target ocupar o mundo todo.
     this.target.eventMode = "static";
     this.target.on("pointerdown", this.onPointerDown, this);
     window.addEventListener("pointermove", this.onPointerMove.bind(this));
@@ -40,9 +37,11 @@ export class Camera {
     const minX = Math.min(0, this.screenWidth - this.worldWidth);
     const maxX = 0;
 
-    if (newX < minX) newX = minX;
+    if (newX < minX)
+      newX = minX;
 
-    if (newX > maxX) newX = maxX;
+    if (newX > maxX) 
+      newX = maxX;
 
     this.target.x = newX;
   }

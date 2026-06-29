@@ -26,20 +26,25 @@ export class World extends Container {
 
     // Create one animal per screen segment, spaced horizontally
     for (let i = 0; i < this.Animals.length; i++) {
+      const posX = (this.animalScreenWidth/1.5 * i) + this.animalScreenWidth / 2;
+      const posY = this.worldHeight / 2;
+      
       const animal = this.createAnimal(this.Animals[i]);
 
       if (animal) {
-        const cage = this.createCage(i, animal);
+        const cage = this.createCage({ x: posX, y: posY }, animal);
         this.Cages.push(cage);
       }
     }
   }
 
   private createAnimal(animalAlias: string): Animal | undefined {
-    const cfg = ANIMALS[animalAlias];
-    if (!cfg) return undefined;
+    const animalConfig = ANIMALS[animalAlias];
+    
+    if (!animalConfig) 
+      return undefined;
 
-    const animal = new Animal(cfg);
+    const animal = new Animal(animalConfig);
     animal.sprite.anchor.set(0.5);
 
     animal.x = 0;
@@ -48,20 +53,13 @@ export class World extends Container {
     return animal;
   }
 
-  private createCage(index: number, animal: Animal): Cage {
-    const posX = this.animalScreenWidth * index + this.animalScreenWidth / 2;
-    const posY = this.worldHeight / 2;
+  private createCage(globalPos: { x: number; y: number }, animal: Animal): Cage {
+    const posX = globalPos.x;
+    const posY = globalPos.y;
 
-    const cage = new Cage(posX, posY);
+    const cage = new Cage(posX, posY, animal.id);
     cage.addChild(animal);
-
     this.addChild(cage);
     return cage;
-  }
-
-  public playSfx(src: string, volume = 1) {
-    const sfx = new Audio(src);
-    sfx.volume = volume;
-    sfx.play();
   }
 }

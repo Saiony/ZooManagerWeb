@@ -1,35 +1,35 @@
-import { PlaceablesType, PlaceablesTypeArray } from "./PlaceablesType";
+import {PlaceablesType, PlaceablesTypeArray} from "./PlaceablesType";
 
 export interface AnimalConfig {
   id: string;
   textureAlias: string;
-  likesArray: PlaceablesTypeArray;
-  dislikesArray: PlaceablesTypeArray;
+  availablePlaceables: PlaceablesTypeArray;
+  baseMoneyPerSecond: number;
 }
 
 export const ANIMALS: Record<string, AnimalConfig> = {
   fox: {
     id: "fox",
     textureAlias: "fox",
-    likesArray: [],
-    dislikesArray: [],
+    availablePlaceables: [PlaceablesType.Flower],
+    baseMoneyPerSecond: 1,
   },
   monkey: {
     id: "monkey",
     textureAlias: "monkey",
-    likesArray: [],
-    dislikesArray: [],
+    availablePlaceables: [PlaceablesType.Tree2, PlaceablesType.Banana],
+    baseMoneyPerSecond: 2,
   },
   lion: {
     id: "lion",
     textureAlias: "lion",
-    likesArray: [],
-    dislikesArray: [],
+    availablePlaceables: [PlaceablesType.Rock, PlaceablesType.Meat],
+    baseMoneyPerSecond: 4,
   },
   elephant: {
     id: "elephant",
     textureAlias: "elephant",
-    likesArray: [PlaceablesType.Tree],
-    dislikesArray: [],
+    availablePlaceables: [PlaceablesType.Tree],
+    baseMoneyPerSecond: 8,
   },
 };

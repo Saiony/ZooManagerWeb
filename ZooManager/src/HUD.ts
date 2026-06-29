@@ -7,7 +7,6 @@ export class HUD extends Container {
   private background: Graphics;
   private world: World;
   private app: Application;
-  // List of placeable aliases to spawn buttons for (pre-registered in PLACEABLES)
   public readonly PlaceablesButtons: string[] = ["tree", "tree2", "rock", "flower", "banana", "meat"];
 
   public static readonly HEIGHT = 100;

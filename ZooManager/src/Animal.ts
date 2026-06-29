@@ -1,5 +1,4 @@
 import { Container, Sprite, Ticker } from "pixi.js";
-import { PlaceablesType } from "./PlaceablesType";
 import type { AnimalConfig } from "./AnimalData";
 import type { Cage } from "./Cage";
 
@@ -7,8 +6,6 @@ export class Animal extends Container {
   sprite: Sprite;
   needFulfilled: boolean = false;
   readonly id: string;
-  readonly likesArray: PlaceablesType[];
-  readonly dislikesArray: PlaceablesType[];
 
   private speed = 0.5;
   private targetX = 0;
@@ -21,9 +18,6 @@ export class Animal extends Container {
   constructor(config: AnimalConfig) {
     super();
     this.id = config.id;
-    this.likesArray = [...config.likesArray];
-    this.dislikesArray = [...config.dislikesArray];
-
     this.sprite = Sprite.from(config.textureAlias);
     this.sprite.anchor.set(0.5);
     this.addChild(this.sprite);
