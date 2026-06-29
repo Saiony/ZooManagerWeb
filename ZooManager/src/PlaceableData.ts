@@ -13,37 +13,37 @@ export const PLACEABLES: Record<string, PlaceableConfig> = {
   tree: {
     placeableType: PlaceablesType.Tree,
     textureAlias: PlaceablesType.Tree,
-    environmentScore: 4,
-    price: 1000
+    environmentScore: 10,
+    price: 500,
   },
   tree2: {
     placeableType: PlaceablesType.Tree2,
     textureAlias: PlaceablesType.Tree2,
     environmentScore: 2,
-    price: 10
+    price: 5,
   },
   banana: {
     placeableType: PlaceablesType.Banana,
     textureAlias: PlaceablesType.Banana,
-    environmentScore: 2,
-    price: 30,
+    environmentScore: 6,
+    price: 15,
   },
   meat: {
     placeableType: PlaceablesType.Meat,
     textureAlias: PlaceablesType.Meat,
-    environmentScore: 5,
-    price: 500
+    environmentScore: 20,
+    price: 100,
   },
   rock: {
     placeableType: PlaceablesType.Rock,
     textureAlias: PlaceablesType.Rock,
-    environmentScore: 2,
-    price: 200
+    environmentScore: 5,
+    price: 50,
   },
   flower: {
     placeableType: PlaceablesType.Flower,
     textureAlias: PlaceablesType.Flower,
     environmentScore: 1,
-    price: 2
-  },  
+    price: 2,
+  },
 };

@@ -1,5 +1,13 @@
-import { Application, Container, Graphics, Sprite, Text } from "pixi.js";
+import {
+  Application,
+  Container,
+  Graphics,
+  Sprite,
+  Text,
+  TextStyle,
+} from "pixi.js";
 import { World } from "./World";
+import { DownloadButton } from "./DownloadButton.ts";
 
 export class MoneyHUD extends Container {
   private readonly background: Graphics;
@@ -28,11 +36,13 @@ export class MoneyHUD extends Container {
     this.icon.y = MoneyHUD.HEIGHT / 2;
     this.addChild(this.icon);
 
-    this.moneyText = new Text("0", {
-      fill: 0xffff66 as any,
-      fontSize: 32 as any,
-      fontWeight: "bold" as any,
-    } as any);
+    const style = new TextStyle({
+      fill: 0xffff66,
+      fontSize: 32,
+      fontWeight: "bold",
+    });
+
+    this.moneyText = new Text({ text: "0", style });
     this.moneyText.x = 55;
     this.moneyText.y = MoneyHUD.HEIGHT / 2 - this.moneyText.height / 2;
     this.addChild(this.moneyText);
@@ -51,5 +61,14 @@ export class MoneyHUD extends Container {
   public destroy(options?: Parameters<Container["destroy"]>[0]) {
     this.app.ticker.remove(this.sync, this);
     super.destroy(options);
+  }
+
+  showEndGameButton() {
+    const downloadButton = new DownloadButton(
+      "https://apps.apple.com/br/app/suspects-mystery-mansion/id1546088542",
+    );
+    downloadButton.x = this.app.screen.width / 2;
+    downloadButton.y = MoneyHUD.HEIGHT / 2 + 100;
+    this.addChild(downloadButton);
   }
 }

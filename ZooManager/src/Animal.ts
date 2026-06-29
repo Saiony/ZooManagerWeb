@@ -44,7 +44,7 @@ export class Animal extends Container {
     if (this.currentWaitTime > 0) {
       this.currentWaitTime--;
       return;
-    }    
+    }
 
     const dx = this.targetX - this.x;
     const dy = this.targetY - this.y;
@@ -59,7 +59,8 @@ export class Animal extends Container {
     this.x += (dx / dist) * this.speed;
     this.y += (dy / dist) * this.speed;
 
-    this.sprite.scale.x = dx < 0 ? Math.abs(this.sprite.scale.x) : -Math.abs(this.sprite.scale.x);
+    this.sprite.scale.x =
+      dx < 0 ? Math.abs(this.sprite.scale.x) : -Math.abs(this.sprite.scale.x);
   }
 
   public satisfyNeed() {

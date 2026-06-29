@@ -2,8 +2,8 @@ import { Container, FederatedPointerEvent } from "pixi.js";
 
 export class Camera {
   private target: Container;
-  private screenWidth: number;
-  private worldWidth: number;
+  private readonly screenWidth: number;
+  private readonly worldWidth: number;
 
   private isDragging: boolean = false;
   private startX: number = 0;
@@ -27,8 +27,7 @@ export class Camera {
   }
 
   private onPointerMove(event: PointerEvent) {
-    if (!this.isDragging) 
-      return;
+    if (!this.isDragging) return;
 
     const currentX = event.clientX;
     const diffX = currentX - this.startX;
@@ -38,11 +37,9 @@ export class Camera {
     const minX = Math.min(0, this.screenWidth - this.worldWidth);
     const maxX = 0;
 
-    if (newX < minX)
-      newX = minX;
+    if (newX < minX) newX = minX;
 
-    if (newX > maxX) 
-      newX = maxX;
+    if (newX > maxX) newX = maxX;
 
     this.target.x = newX;
   }

@@ -1,11 +1,11 @@
-import {PlaceablesType, PlaceablesTypeArray} from "./PlaceablesType";
+import { PlaceablesType, PlaceablesTypeArray } from "./PlaceablesType";
 
 export interface AnimalConfig {
   id: string;
   textureAlias: string;
   availablePlaceables: PlaceablesTypeArray;
   baseMoneyPerSecond: number;
-  initialEnvironmentScoreToLvlUp: number,
+  initialEnvironmentScoreToLvlUp: number;
 }
 
 export const ANIMALS: Record<string, AnimalConfig> = {

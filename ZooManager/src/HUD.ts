@@ -2,14 +2,21 @@ import { Container, Graphics, Application } from "pixi.js";
 import { HUDPlaceableButton } from "./HUDPlaceableButton";
 import { World } from "./World";
 import { PLACEABLES } from "./PlaceableData";
-import {PlaceablesTypeArray} from "./PlaceablesType.ts";
+import { PlaceablesTypeArray } from "./PlaceablesType.ts";
 
 export class HUD extends Container {
-  private background: Graphics;
-  private world: World;
-  private app: Application;
-  private buttonsContainer: Container;
-  public readonly PlaceablesButtons: string[] = ["tree", "tree2", "rock", "flower", "banana", "meat"];
+  private readonly background: Graphics;
+  private readonly world: World;
+  private readonly app: Application;
+  private readonly buttonsContainer: Container;
+  private readonly PlaceablesButtons: string[] = [
+    "tree",
+    "tree2",
+    "rock",
+    "flower",
+    "banana",
+    "meat",
+  ];
 
   public static readonly HEIGHT = 150;
 
@@ -36,17 +43,15 @@ export class HUD extends Container {
   }
 
   public setButtonsByTypes(types: PlaceablesTypeArray) {
-    const aliases = types.map(t => t as unknown as string);
+    const aliases = types.map((t) => t as unknown as string);
     this.rebuildButtons(aliases);
   }
 
   private rebuildButtons(aliases: string[]) {
     // clean old buttons
-    this.buttonsContainer.removeChildren().forEach(c => c.destroy());
+    this.buttonsContainer.removeChildren().forEach((c) => c.destroy());
 
-    const filtered = aliases
-      .map(a => PLACEABLES[a])
-      .filter(cfg => !!cfg);
+    const filtered = aliases.map((a) => PLACEABLES[a]).filter((cfg) => !!cfg);
 
     const total = filtered.length;
     if (total === 0) return;
@@ -64,8 +69,8 @@ export class HUD extends Container {
   public setButtonsLocked(locked: boolean) {
     this.buttonsContainer.children.forEach((child) => {
       const btn = child as unknown as HUDPlaceableButton;
-      if (btn && typeof (btn as any).setLocked === "function") {
-        (btn as any).setLocked(locked);
+      if (btn && typeof btn.setLocked === "function") {
+        btn.setLocked(locked);
       }
     });
   }

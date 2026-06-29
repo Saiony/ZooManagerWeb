@@ -1,9 +1,16 @@
-import { Application, Container, FederatedPointerEvent, Sprite, Text } from "pixi.js";
+import {
+  Application,
+  Container,
+  FederatedPointerEvent,
+  Sprite,
+  Text,
+  TextStyle,
+} from "pixi.js";
 import { World } from "./World";
 import { Placeable } from "./Placeable";
 import type { PlaceableConfig } from "./PlaceableData";
 import { Cage } from "./Cage.ts";
-import {sound} from "@pixi/sound";
+import { sound } from "@pixi/sound";
 
 // HUD button that allows dragging a placeable into the world.
 export class HUDPlaceableButton extends Container {
@@ -26,23 +33,27 @@ export class HUDPlaceableButton extends Container {
     icon.scale.set(1.5);
     this.addChild(icon);
 
-    // price display (banana icon + number) under the main icon
     const priceContainer = new Container();
-    priceContainer.y = (icon.height * 0.5); // place a bit under the main icon
+    priceContainer.y = icon.height * 0.5;
     this.addChild(priceContainer);
 
     const moneyIcon = Sprite.from("money");
     moneyIcon.anchor.set(0.5);
     moneyIcon.scale.set(0.4);
-    moneyIcon.x = -12; // shift left so number fits on right
+    moneyIcon.x = -12;
     priceContainer.addChild(moneyIcon);
 
-    const priceText = new Text(`${this.placeableConfig.price}`, {
-      fill: 0xffff66 as any,
-      fontSize: 32 as any,
-      fontWeight: "bold" as any,
-    } as any);
-    
+    const style = new TextStyle({
+      fill: 0xffff66,
+      fontSize: 32,
+      fontWeight: "bold",
+    });
+
+    const priceText = new Text({
+      text: `${this.placeableConfig.price}`,
+      style,
+    });
+
     // align vertically with money icon
     priceText.x = 0;
     priceText.y = -priceText.height / 2;
@@ -57,9 +68,8 @@ export class HUDPlaceableButton extends Container {
   }
 
   private onPointerDown(event: FederatedPointerEvent) {
-    if (this.locked) 
-      return; 
-    
+    if (this.locked) return;
+
     // create preview that follows the pointer
     this.preview = Sprite.from(this.placeableConfig.textureAlias);
     this.preview.anchor.set(0.5);
@@ -104,15 +114,14 @@ export class HUDPlaceableButton extends Container {
   }
 
   private spawnPlaceable(globalPos: { x: number; y: number }, cage: Cage) {
-    // convert from screen to CAGE-local coordinates (not world)
     const localPos = cage.toLocal(globalPos);
 
     const placeable = new Placeable({
       textureAlias: this.placeableConfig.textureAlias,
       placeableType: this.placeableConfig.placeableType,
-      environmentScore: this.placeableConfig.environmentScore
+      environmentScore: this.placeableConfig.environmentScore,
     });
-    
+
     placeable.sprite.anchor.set(0.5);
     placeable.position.set(localPos.x, localPos.y);
     cage.addPlaceable(placeable);

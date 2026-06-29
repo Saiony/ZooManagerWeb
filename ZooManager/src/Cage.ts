@@ -1,7 +1,7 @@
-import {Container, Graphics, Rectangle, Sprite, Text} from "pixi.js";
-import {ANIMALS} from "./AnimalData.ts";
-import {Placeable} from "./Placeable.ts";
-import {World} from "./World.ts";
+import { Container, Graphics, Rectangle, Sprite, Text } from "pixi.js";
+import { ANIMALS } from "./AnimalData.ts";
+import { Placeable } from "./Placeable.ts";
+import { World } from "./World.ts";
 
 export class Cage extends Container {
   readonly textureAlias = "cage";
@@ -12,12 +12,12 @@ export class Cage extends Container {
   environmentScoreToLvlUp: number;
   moneyPerSecond: number;
   locked: boolean = false;
-  private lockOverlay: Sprite;
-  private level: number = 0;
-  
-  private background: Graphics;
+  private readonly lockOverlay: Sprite;
+  public level: number = 0;
+
+  private readonly background: Graphics;
   public isPointerOver: boolean = false;
-  
+
   // Progress bar UI
   private progressBg!: Graphics;
   private progressFill!: Graphics;
@@ -32,7 +32,8 @@ export class Cage extends Container {
     this.y = posY;
     this.animalType = animalType;
     this.currentEnvironmentScore = 0;
-    this.environmentScoreToLvlUp = ANIMALS[animalType].initialEnvironmentScoreToLvlUp;
+    this.environmentScoreToLvlUp =
+      ANIMALS[animalType].initialEnvironmentScoreToLvlUp;
     this.moneyPerSecond = ANIMALS[animalType].baseMoneyPerSecond;
 
     const width = 200;
@@ -65,15 +66,13 @@ export class Cage extends Container {
     this.initProgressBar(width, height);
     this.updateProgressBar();
   }
-  
-  public addPlaceable(placeable: Placeable)
-  {
-    if (this.locked)
-      return;
+
+  public addPlaceable(placeable: Placeable) {
+    if (this.locked) return;
 
     this.addChild(placeable);
-    this.currentEnvironmentScore += placeable.environmentScore;   
-   
+    this.currentEnvironmentScore += placeable.environmentScore;
+
     this.ChecklvlUp();
     this.updateProgressBar();
   }
@@ -90,25 +89,19 @@ export class Cage extends Container {
   public lock() {
     this.setLocked(true);
   }
-  
-  private ChecklvlUp()
-  {
-    if(this.currentEnvironmentScore < this.environmentScoreToLvlUp)
-      return;
 
-    this.level++;    
-    this.environmentScoreToLvlUp *= this.currentEnvironmentScore;
-    
+  private ChecklvlUp() {
+    if (this.currentEnvironmentScore < this.environmentScoreToLvlUp) return;
+
+    this.level++;
+    this.environmentScoreToLvlUp *= 2;
+
     const oldMoneyPerSecond = this.moneyPerSecond;
     this.moneyPerSecond *= 2;
-    
+
     this.world.addMoneyPerSecond(this.moneyPerSecond - oldMoneyPerSecond);
 
-    // unlocks next cage
-    const idx = this.world.Cages.indexOf(this);
-    if (idx >= 0 && idx + 1 < this.world.Cages.length) {
-      this.world.Cages[idx + 1].unlock();
-    }
+    this.world.unlockNextCage(this);
   }
 
   private initProgressBar(cageWidth: number, cageHeight: number) {
@@ -127,29 +120,32 @@ export class Cage extends Container {
 
     this.levelText = new Text(this.level.toString());
     this.levelText.anchor.set(1, 0.5);
-    this.levelText.x = -barWidth / 2 - 8; 
+    this.levelText.x = -barWidth / 2 - 8;
     this.levelText.y = yOffset;
     this.addChild(this.levelText);
   }
 
   private updateProgressBar() {
-    if (!this.progressFill || !this.progressBg) 
-      return;
+    if (!this.progressFill || !this.progressBg) return;
 
     this.levelText.text = this.level.toString();
-    const cageWidth = 200; 
+    const cageWidth = 200;
     const cageHeight = 200;
     const barWidth = cageWidth * 0.7;
     const barHeight = 10;
     const yOffset = -cageHeight / 2 - 12;
 
-    const ratio = Math.max(0, Math.min(1, this.currentEnvironmentScore / this.environmentScoreToLvlUp));
+    const ratio = Math.max(
+      0,
+      Math.min(1, this.currentEnvironmentScore / this.environmentScoreToLvlUp),
+    );
 
     this.progressFill.clear();
     if (ratio > 0) {
       const fillWidth = barWidth * ratio;
-      this.progressFill.rect(-barWidth / 2, yOffset - barHeight / 2, fillWidth, barHeight)
-                       .fill({ color: 0x33cc33, alpha: 0.9 });
+      this.progressFill
+        .rect(-barWidth / 2, yOffset - barHeight / 2, fillWidth, barHeight)
+        .fill({ color: 0x33cc33, alpha: 0.9 });
     }
   }
 }

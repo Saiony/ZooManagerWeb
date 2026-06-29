@@ -1,5 +1,5 @@
 import { Application, Assets } from "pixi.js";
-import { sound } from "@pixi/sound"
+import { sound } from "@pixi/sound";
 import { World } from "./World";
 import { Camera } from "./Camera";
 import { HUD } from "./HUD";
@@ -20,19 +20,18 @@ import meatImg from "./assets/Placeables/meat.png";
 import rockImg from "./assets/Placeables/rock.png";
 import flowerImg from "./assets/Placeables/flower.png";
 
-import bgmMusic from './assets/sfx/bgmlofi.mp3';
-import placeSfx from './assets/sfx/place.mp3';
+import bgmMusic from "./assets/sfx/bgmlofi.mp3";
+import placeSfx from "./assets/sfx/place.mp3";
 
-import money from './assets/UI/money.png';
-import locked from './assets/UI/locked.png';
-
+import money from "./assets/UI/money.png";
+import locked from "./assets/UI/locked.png";
 
 async function bootstrap() {
   const app = new Application();
 
   async function setup() {
     await app.init({
-      background: "#1099bb",
+      background: "#416e1d",
       width: 375,
       height: 667,
       antialias: true,
@@ -59,11 +58,11 @@ async function bootstrap() {
       { alias: "meat", src: meatImg },
       { alias: "rock", src: rockImg },
       { alias: "flower", src: flowerImg },
-      { alias: "bgm", src: bgmMusic},
-      { alias: "placeSfx", src: placeSfx},
-      { alias: "placeSfx", src: placeSfx},
-      { alias: "money", src: money},
-      { alias: "locked", src: locked},
+      { alias: "bgm", src: bgmMusic },
+      { alias: "placeSfx", src: placeSfx },
+      { alias: "placeSfx", src: placeSfx },
+      { alias: "money", src: money },
+      { alias: "locked", src: locked },
     ];
 
     // Load the assets defined above.
@@ -90,16 +89,19 @@ async function bootstrap() {
     const moneyHud = new MoneyHUD(app, world);
     app.stage.addChild(moneyHud);
 
+    world.on("gameEnded", () => {
+      moneyHud.showEndGameButton();
+    });
+
     let currentCentered: Cage | null = null;
 
     const getCenteredCage = (): Cage | null => {
-      if (world.Cages.length === 0)
-        return null;
-      
+      if (world.Cages.length === 0) return null;
+
       const centerWorldX = -world.x + app.screen.width / 2;
       let best: Cage | null = null;
       let bestDist = Number.POSITIVE_INFINITY;
-      
+
       for (const cage of world.Cages) {
         const dist = Math.abs(cage.x - centerWorldX);
         if (dist < bestDist) {
@@ -111,21 +113,19 @@ async function bootstrap() {
     };
 
     const applyHUDFor = (cage: Cage | null) => {
-      if (!cage)
-        return;
-      
+      if (!cage) return;
+
       const animalConfig = ANIMALS[cage.animalType];
-      
-      if (!animalConfig) 
-        return;
-      
+
+      if (!animalConfig) return;
+
       hud.setButtonsByTypes(animalConfig.availablePlaceables);
-      hud.setButtonsLocked(!!cage.locked);
+      hud.setButtonsLocked(cage.locked);
     };
 
     app.ticker.add(() => {
       // economy
-      const dt = app.ticker.deltaMS / 2000;
+      const dt = app.ticker.deltaMS / 1000;
       if (world.MoneyPerSecond !== 0) {
         world.addMoney(world.MoneyPerSecond * dt);
       }
@@ -143,5 +143,5 @@ async function bootstrap() {
 }
 
 bootstrap().catch((err) => {
-  console.error("Falha ao iniciar o jogo:", err);
+  console.error("Error launching the game:", err);
 });
